@@ -1,15 +1,28 @@
 #include "red_black_tree.h"
 
+//TODO: determine whether to return a pointer or the object itself
 rb_red_blk_node *malloc_node(rb_red_blk_tree tree) {
-  rb_red_blk_node_mem mem = tree.node_mem[tree.next_mem]; //get the new node
-  tree.next_mem = mem.next_mem;
-  return mem.node;
+  rb_red_blk_node_mem *mem = &tree.node_mem[tree.next_mem]; //get the new node
+  tree.next_mem = mem->next_mem;
+  return &mem->node;
 }
 
 void free_node(rb_red_blk_tree tree, unsigned int node_ind) {
   unsigned int temp_ind = tree.next_mem;
   tree.next_mem = node_ind;
   tree.node_mem[node_ind].next_mem = temp_ind;
+}
+
+rb_red_blk_tree *malloc_tree() {
+  rb_red_blk_tree *tree = &tree_arr[next_tree_mem];
+  next_tree_mem = tree->next_tree_mem;
+  return tree;
+}
+
+void free_tree(unsigned int tree_ind) {
+  unsigned int temp_ind = next_tree_mem;
+  next_tree_mem = tree_ind;
+  tree_arr[tree_ind].next_tree_mem = temp_ind;
 }
 
 /***********************************************************************/
